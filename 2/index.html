@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Live Audio via WebSocket</h2>
+<button onclick="start()">Start</button>
+
+<script>
+let audioCtx;
+let socket;
+
+function start() {
+  audioCtx = new AudioContext({sampleRate:16000});
+
+  const ESP_IP = "192.168.0.18";  // 🔥 CHANGE TO YOUR ESP IP
+
+  socket = new WebSocket("ws://" + ESP_IP + ":81/");
+  socket.binaryType = "arraybuffer";
+
+  socket.onopen = () => console.log("Connected to ESP32!");
+
+  socket.onmessage = (event) => {
+    let pcm = new Int16Array(event.data);
+    let float = new Float32Array(pcm.length);
+
+    for (let i = 0; i < pcm.length; i++)
+      float[i] = pcm[i] / 32768;
+
+    let buf = audioCtx.createBuffer(1, float.length, 16000);
+    buf.getChannelData(0).set(float);
+
+    let src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    src.start();
+  };
+}
+</script>
+</body>
+</html>

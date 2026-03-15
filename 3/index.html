@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Clean Live Audio</h2>
+<button onclick="start()">Start</button>
+
+<script>
+let ctx;
+let ws;
+let queue = [];
+
+async function start() {
+  ctx = new AudioContext({ sampleRate: 16000 });
+
+  const ESP_IP = "192.168.0.24";  // <-- PUT YOUR ESP IP
+
+  ws = new WebSocket("ws://" + ESP_IP + ":81/");
+  ws.binaryType = "arraybuffer";
+
+  ws.onmessage = (e) => {
+    queue.push(new Int16Array(e.data));
+    playBuffered();
+  };
+}
+
+function playBuffered() {
+  if (queue.length === 0) return;
+
+  let pcm = queue.shift();
+  let float = new Float32Array(pcm.length);
+
+  for (let i = 0; i < pcm.length; i++)
+    float[i] = pcm[i] / 32768;
+
+  let buf = ctx.createBuffer(1, float.length, 16000);
+  buf.getChannelData(0).set(float);
+
+  let src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.connect(ctx.destination);
+  src.start();
+}
+</script>
+</body>
+</html>
