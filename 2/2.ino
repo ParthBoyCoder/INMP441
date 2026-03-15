@@ -2,7 +2,7 @@
 #include <WebSocketsServer.h>
 #include <driver/i2s.h>
 
-#define WIFI_SSID " UR SSID"
+#define WIFI_SSID "UR SSID"
 #define WIFI_PASS "UR PASS"
 
 #define I2S_BCLK 26
