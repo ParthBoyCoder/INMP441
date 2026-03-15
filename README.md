@@ -17,6 +17,10 @@ This project was created to experiment with **ESP32 audio capture, I2S microphon
 * Multiple experimental versions included
 * No PC software required (just a browser)
 
+DEMO VIDEO ON YOUTUBE:
+
+https://youtu.be/v_W0UrSFPy4
+
 ---
 
 # Repository Structure
