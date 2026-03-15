@@ -2,8 +2,8 @@
 #include <WebSocketsServer.h>
 #include <driver/i2s.h>
 
-#define WIFI_SSID "PRADIP -2.4Ghz"
-#define WIFI_PASS "Pradip@123"
+#define WIFI_SSID "UR SSID"
+#define WIFI_PASS "UR PASS"
 
 #define I2S_SAMPLE_RATE 16000
 #define I2S_BCLK 26
